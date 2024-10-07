@@ -1,13 +1,31 @@
 use std::fs::File;
-use std::io::prelude::*;
+use std::io::{self, prelude::*};
 
 fn main() {
-    let mut file = File::open("file.txt").expect("Error reading file from fs");
+    println!("Write file name: ");
+    let mut input_value = String::new();
 
-    let mut content = String::new();
+    io::stdin()
+        .read_line(&mut input_value)
+        .expect("Error reading input value");
 
-    file.read_to_string(&mut content)
-        .expect("Error when serialazing file to string");
+    let input_value = input_value.trim();
 
-    println!("File content:\n\n{}", content);
+    let mut filepath = String::from("./txts/");
+
+    let filename = format!("{}.txt", input_value);
+
+    filepath.push_str(&filename);
+
+    let mut file = File::create(filepath).expect("Error creating file in fs");
+
+    println!("Write file content: ");
+    let mut text_value = String::new();
+
+    io::stdin()
+        .read_line(&mut text_value)
+        .expect("Error reading input value");
+
+    file.write_all(text_value.as_bytes())
+        .expect("Error writing data to file");
 }
